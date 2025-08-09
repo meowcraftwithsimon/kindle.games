@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8"/>
+  <title>Hádej číslo (Kindle)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <style>
+    body{font-family:Arial,sans-serif; padding:1rem; max-width:600px; margin:auto;}
+    input,button{font-size:1rem;padding:0.4rem; margin:0.2rem;}
+    #log{margin-top:1rem;white-space:pre-wrap;}
+  </style>
+</head>
+<body>
+  <h1>Hádej číslo (1–100)</h1>
+  <p>Počet pokusů: <span id="tries">0</span></p>
+  <input id="guess" type="number" min="1" max="100" placeholder="Zadej číslo"/>
+  <button id="tryBtn">Tipni</button>
+  <button id="newBtn">Nová hra</button>
+  <div id="log"></div>
+
+  <script>
+    (function(){
+      var secret, tries, guessEl = document.getElementById('guess'),
+          triesEl = document.getElementById('tries'),
+          log = document.getElementById('log');
+
+      function newGame(){
+        secret = Math.floor(Math.random()*100) + 1;
+        tries = 0;
+        triesEl.textContent = tries;
+        log.textContent = 'Zahájeno — hádej číslo mezi 1 a 100.';
+        guessEl.value = '';
+      }
+
+      function tryGuess(){
+        var g = parseInt(guessEl.value,10);
+        if (!g || g < 1 || g > 100) {
+          log.textContent = 'Zadej číslo od 1 do 100.';
+          return;
+        }
+        tries++;
+        triesEl.textContent = tries;
+        if (g === secret) {
+          log.textContent = 'Správně! Číslo bylo ' + secret + '. Pokusů: ' + tries + '.';
+        } else if (g < secret) {
+          log.textContent = 'Vyšší než ' + g + '.';
+        } else {
+          log.textContent = 'Nižší než ' + g + '.';
+        }
+      }
+
+      document.getElementById('tryBtn').addEventListener('click', tryGuess);
+      document.getElementById('newBtn').addEventListener('click', newGame);
+      guessEl.addEventListener('keydown', function(e){ if(e.key === 'Enter') tryGuess(); });
+
+      newGame();
+    })();
+  </script>
+</body>
+</html>
